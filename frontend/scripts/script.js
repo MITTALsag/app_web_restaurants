@@ -1,3 +1,8 @@
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
+    Connexion();
+});
+
 async function Connexion() {
     const emailInput = document.getElementById("email") as HTMLInputElement;
     const passwordInput = document.getElementById("password") as HTMLInputElement;
