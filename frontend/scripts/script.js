@@ -1,38 +1,29 @@
-document.getElementById("loginForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Empêche l'envoi traditionnel du formulaire
-    Connexion();
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    await Connexion(); // Ajout de 'await' car la fonction est async
 });
 
+
 async function Connexion() {
-    const emailInput = document.getElementById("email") as HTMLInputElement;
-    const passwordInput = document.getElementById("password") as HTMLInputElement;
-
-    const email = emailInput.value.trim();
-    const password = passwordInput.value; // <-- Supprimez les parenthèses : .value au lieu de .value()
-
-    if (!email || !password) {
-        alert("Veuillez remplir tous les champs."); // <-- Affichez le message à l'utilisateur
-        return;
-    }
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://127.0.0.1:5000/login", {
+        const response = await fetch("/login", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({email, password})
         });
 
-        const data = await response.json();
-
-        if (data.status === "success") {
-            alert("Connexion réussie !");
-            // Redirigez ou faites une action post-connexion
+        const result = await response.json();
+        
+        if (result.status === "success") {
+            alert("Connecté !");
+            // Redirection ou traitement
         } else {
-            alert(data.message); // Affiche l'erreur retournée par le serveur
+            alert(`Erreur: ${result.message}`);
         }
-
-    } catch(error) {
-        alert("Erreur de connexion au serveur.");
-        console.error("Erreur :", error);
+    } catch (error) {
+        alert("Erreur réseau");
     }
 }
